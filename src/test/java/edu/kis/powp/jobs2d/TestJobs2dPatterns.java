@@ -27,6 +27,7 @@ public class TestJobs2dPatterns {
 				DriverFeature.getDriverManager());
 
 		application.addTest("Figure Joe 1", selectTestFigureOptionListener);
+		application.addTest("Figure Joe 2", selectTestFigureOptionListener);
 	}
 
 	/**
@@ -52,10 +53,9 @@ public class TestJobs2dPatterns {
 	 */
 	private static void setupDefaultDrawerVisibilityManagement(Application application) {
 		DefaultDrawerFrame defaultDrawerWindow = DefaultDrawerFrame.getDefaultDrawerFrame();
-		application.addJFrameWindow("Drawer", defaultDrawerWindow);
+		application.addComponentMenuElementWithCheckBox(DrawPanelController.class, "Default Drawer Visibility",
+				new SelectChangeVisibleOptionListener(defaultDrawerWindow), true);
 		defaultDrawerWindow.setVisible(true);
-//		application.addComponentMenuElementWithCheckBox(DrawPanelController.class, "Default Drawer Visibility",
-//				new SelectChangeVisibleOptionListener(defaultDrawerWindow), true);
 	}
 
 	/**
