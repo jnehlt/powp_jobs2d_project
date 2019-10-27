@@ -5,11 +5,10 @@ import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import edu.kis.legacy.drawer.panel.DefaultDrawerFrame;
-import edu.kis.legacy.drawer.panel.DrawPanelController;
+import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.drivers.adapter.DrawPanelAdapter;
-import edu.kis.powp.jobs2d.events.SelectChangeVisibleOptionListener;
+import edu.kis.powp.jobs2d.drivers.adapter.LineDrawerAdapter;
 import edu.kis.powp.jobs2d.events.SelectTestFigureOptionListener;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
@@ -39,23 +38,16 @@ public class TestJobs2dPatterns {
 		Job2dDriver loggerDriver = new LoggerDriver();
 		DriverFeature.addDriver("Logger Driver", loggerDriver);
 		DriverFeature.getDriverManager().setCurrentDriver(loggerDriver);
-
-		Job2dDriver testDriver = new DrawPanelAdapter();
+		Job2dDriver testDriver = new DrawPanelAdapter(DrawerFeature.getDrawerController());
 		DriverFeature.addDriver("Buggy Simulator", testDriver);
+		Job2dDriver basicDriver = new LineDrawerAdapter(DrawerFeature.getDrawerController(), LineFactory.getBasicLine());
+		DriverFeature.addDriver("Basic Line", basicDriver);
+		Job2dDriver dotDriver = new LineDrawerAdapter(DrawerFeature.getDrawerController(), LineFactory.getDottedLine());
+		DriverFeature.addDriver("Dotted Line", dotDriver);
+		Job2dDriver specDriver = new LineDrawerAdapter(DrawerFeature.getDrawerController(), LineFactory.getSpecialLine());
+		DriverFeature.addDriver("Special Line", specDriver);
 
 		DriverFeature.updateDriverInfo();
-	}
-
-	/**
-	 * Auxiliary routines to enable using Buggy Simulator.
-	 * 
-	 * @param application Application context.
-	 */
-	private static void setupDefaultDrawerVisibilityManagement(Application application) {
-		DefaultDrawerFrame defaultDrawerWindow = DefaultDrawerFrame.getDefaultDrawerFrame();
-		application.addComponentMenuElementWithCheckBox(DrawPanelController.class, "Default Drawer Visibility",
-				new SelectChangeVisibleOptionListener(defaultDrawerWindow), true);
-		defaultDrawerWindow.setVisible(true);
 	}
 
 	/**
@@ -80,19 +72,15 @@ public class TestJobs2dPatterns {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				Application app = new Application("2d jobs Visio");
-				DrawerFeature.setupDrawerPlugin(app);
-				setupDefaultDrawerVisibilityManagement(app);
+		EventQueue.invokeLater(() -> {
+			Application app = new Application("2d jobs Visio");
+			DrawerFeature.setupDrawerPlugin(app);
+			DriverFeature.setupDriverPlugin(app);
+			setupDrivers(app);
+			setupPresetTests(app);
+			setupLogger(app);
 
-				DriverFeature.setupDriverPlugin(app);
-				setupDrivers(app);
-				setupPresetTests(app);
-				setupLogger(app);
-
-				app.setVisibility(true);
-			}
+			app.setVisibility(true);
 		});
 	}
 
