@@ -17,12 +17,12 @@ public class SelectTestFigureOptionListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("Figure Joe 2")) {
-			DrawerFeature.getDrawerController().clearPanel();
-			FiguresJoe.figureScript2(driverManager.getCurrentDriver());
-		} else {
+		if(e.getActionCommand().equals("Figure Joe 1")) {
 			DrawerFeature.getDrawerController().clearPanel();
 			FiguresJoe.figureScript1(driverManager.getCurrentDriver());
+		} else if(e.getActionCommand().equals("Figure Joe 2")) {
+			DrawerFeature.getDrawerController().clearPanel();
+			FiguresJoe.figureScript2(driverManager.getCurrentDriver());
 		}
 	}
 }
